@@ -8,7 +8,7 @@
 }
 
 body {
-  background: #ffffff;
+  background: #8758ff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -80,8 +80,7 @@ h1 {
 }
 
 .completed {
-  color: #c5aeff;
-  text-decoration: line-through;
+  color: #fff;
   cursor: pointer;
 }
 

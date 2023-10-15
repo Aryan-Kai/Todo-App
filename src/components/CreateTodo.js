@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form"
-import TodoLayout from "./TodoLayout";
+import displayIcon from "../assets/display.png"
+import wishlistIcon from "../assets/wishlist.png"
 import { v4 as uuidv4 } from "uuid";
+import NewTodoLayout from "./NewTodoLayout";
 function CreateTodo ({addData}) {
     const [todos, setTodos] = useState([]);
+    const deleteTodo = (id) => setTodos(todos.filter((todo) => todo.id !== id));
     const addTodo = (todo) => {
         setTodos([
           ...todos,
@@ -11,8 +14,7 @@ function CreateTodo ({addData}) {
         ]);
       }
     const [data,setData] = useState({
-        taskTitle:'',
-        content:''
+        taskTitle:''
     })
     const {
         register,
@@ -24,27 +26,34 @@ function CreateTodo ({addData}) {
       const onSubmit = (e) => {
 
             addTodo(data)
-            setData({...data,title:''})
-            setData({...data,content:''})    
+            setData({...data,taskTitle:''})  
       }
 
     return(
-        <div id="/create" className="TodoWrapper">
+      <div id="/create" style={{display:'flex'}}>
+        <div>
+        <img src={displayIcon} className='TodoIcon' style={{marginTop:20,width:500,height:500}}/>
+        </div>
+        <div className="TodoWrapper">
             <h1>Create A New Task</h1>
         <form onSubmit={handleSubmit(onSubmit)} className="Form">
-        <input {...register("Content")} value={data.content} onChange={(e) => setData({...data,content:e.target.content})} className="TodoInput" placeholder='What is the task today?'/>
-        <input {...register("TaskTitle")} value={data.taskTitle} onChange={(e) => setData({...data,taskTitle:e.target.value})} className="TodoInput" placeholder='Type your Task Title'/>
-        {errors.exampleRequired && <span>This field is required</span>}
+        <input {...register("taskTitle", {required:true, maxLength:30})} value={data.taskTitle} onChange={(e) => setData({...data,taskTitle:e.target.value})} className="TodoInput" placeholder='What is your task today'/>
+        {errors.taskTitle && <span style={{color:'red',marginLeft:10,marginRight:10}}>This field is required</span>}
         <button type="submit" className="Button">Add Task</button>
         </form>
         {todos.map((todo,index)=>
             (
-            <TodoLayout
+            <NewTodoLayout
             key={index}
             task={todo}
+            deleteTodo={deleteTodo}
           />
           )
         )}
+        </div>
+        <div>
+        <img src={wishlistIcon} className='TodoIcon' style={{marginTop:20,width:500,height:500}}/>
+        </div>
         </div>
     )
 }
